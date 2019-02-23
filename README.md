@@ -12,3 +12,5 @@
 * no_image.txt
   * This is a list of location indexes that do not have a downloaded image associated 
 
+* Downloaded Images
+ * See team Google drive "iste438haunted" for all images in a zip file
