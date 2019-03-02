@@ -61,3 +61,26 @@ cursor: pointer;
 .mapboxgl-popup {
 max-width: 200px;
 }
+
+#s_box {
+  height: 58px;
+}
+
+
+#search_text {
+    width: 150px;
+    /* height: 26px; */
+}
+
+#search_button {
+    position: relative;
+    /* top: -30px; */
+    /* left: 177px; */
+    background-color: DodgerBlue;
+    border: none;
+    color: white;
+    padding: 7px 13px;
+    font-size: 17px;
+    cursor: pointer;
+    border-radius: 5px;
+}

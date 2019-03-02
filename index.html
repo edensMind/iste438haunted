@@ -19,6 +19,8 @@
   <script src='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 
 <body>
@@ -29,7 +31,10 @@
     <div class="bg-light border-right" id="sidebar-wrapper">
       <div class="sidebar-heading">Start Bootstrap </div>
       <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
+        <div class="list-group-item list-group-item-action bg-light" id="s_box">
+        	<input type="text" name="search" id="search_text" placeholder="ZIP code" />
+        	<button id="search_button" class="fa fa-search" onclick="getObject();"></button>
+        </div>
         <a href="#" class="list-group-item list-group-item-action bg-light">Shortcuts</a>
         <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
         <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
@@ -88,7 +93,7 @@
   <!-- Menu Toggle Script -->
   <script>
     ///////////////////////////////////////////////////////////////////////////////////////////
-
+    // SET UP MAP
     mapboxgl.accessToken = 'pk.eyJ1IjoiZGplMjQwMiIsImEiOiJjanNxcHcyaXUwZjBqNDNyemdxYXhrOW9xIn0.R1qo-VYm35TgEjtvZe3Q_Q';
     var map = new mapboxgl.Map({
       container: 'map',
@@ -97,7 +102,10 @@
       center: [-96.82561985119901, 38.190693572931366], // starting position [lng, lat]
       zoom: 3.729604641331270 // starting zoom
     });
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////
+    // DISPLAY MARKER
     var temp_marker = [-77.0353, 38.8895];
     // create the popup
     var popup = new mapboxgl.Popup({ offset: 25 })
@@ -112,6 +120,7 @@
       .setLngLat(temp_marker)
       .setPopup(popup) // sets a popup on this marker
       .addTo(map);
+
     ///////////////////////////////////////////////////////////////////////////////////////////
     // toggle sidebar and resize map
     function sleep (time) {
@@ -126,8 +135,45 @@
           map.resize();
       });
     });
+    
     ///////////////////////////////////////////////////////////////////////////////////////////
+    // This function return a JSON object of a location based on the Zip code in search bar
+	function getObject(){
+	  var zippcode = document.getElementById("search_text").value;
+	  var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+zippcode;
+	  url += '.json?types=postcode&country=US&access_token=pk.eyJ1IjoiZGplMjQwMiIsImEiOiJjanNxcHcyaXUwZjBqNDNyemdxYXhrOW9xIn0.R1qo-VYm35TgEjtvZe3Q_Q';
 
+	  return fetch(url, {
+	      method: 'GET',
+	      headers: {
+	          'Accept': 'application/json',
+	          'Content-Type': 'application/json',
+	      }
+
+	  })
+	  .then(function(response) {
+	    return response.text();
+	  })
+	  .then(function(data){
+	    //console.log(data); //this will just be text
+	    var data_obj = JSON.parse(data);
+	    console.log("name: "+data_obj.features[0].place_name);
+	    console.log("lng: "+data_obj.features[0].geometry.coordinates[0]);
+	    console.log("lat: "+data_obj.features[0].geometry.coordinates[1]);
+
+	    var lng = data_obj.features[0].geometry.coordinates[0];
+	    var lat = data_obj.features[0].geometry.coordinates[1];
+
+		map.flyTo({
+			center: [lng,lat],
+			zoom: 10.5
+		});
+	    return data_obj
+
+	    
+	  })
+
+	}
   </script>
 
 </body>
