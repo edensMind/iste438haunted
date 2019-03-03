@@ -84,3 +84,12 @@ max-width: 200px;
     cursor: pointer;
     border-radius: 5px;
 }
+
+#searched_town {
+  background-color: #bbbbbb!important;
+  font-weight: bold;
+}
+
+.search_result {
+  cursor: pointer;
+}
