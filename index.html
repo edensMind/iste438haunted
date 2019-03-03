@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+<!--   <base href="/">  -->
 
   <title>Simple Sidebar - Start Bootstrap Template</title>
 
@@ -78,7 +79,7 @@
       </nav>
 
       <div class="container-fluid">
-        <div id='map' style='width: 100%; height: 700px;'></div>
+        <div id='map' style='width: 100%; height: 800px;'></div>
       </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -106,20 +107,47 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     // DISPLAY MARKER
-    var temp_marker = [-77.0353, 38.8895];
-    // create the popup
-    var popup = new mapboxgl.Popup({ offset: 25 })
-    .setText('This is a test popup');
-     
-    // create DOM element for the marker
-    var el = document.createElement('div');
-    el.id = 'marker';
 
-    // create the marker
-    new mapboxgl.Marker(el)
-      .setLngLat(temp_marker)
-      .setPopup(popup) // sets a popup on this marker
-      .addTo(map);
+    var allLocations = {};
+
+    function getAllPoints() {
+		$.ajax({
+			url:"queries/getAllPoints.php",
+			method:"POST",
+			dataType:'json',
+			success:function(data)
+			{
+				allLocations = data;
+
+				for (var i=4500; i<4600; i++) {
+
+					//console.log(allLocations[i].location);
+
+				    var temp_marker = [allLocations[i].longitude, allLocations[i].latitude];
+				    // create the popup
+				    var popup = new mapboxgl.Popup({ offset: 25 })
+				    .setHTML("<b>"+allLocations[i].location+"</b><hr/>"+allLocations[i].description);
+				     
+				    // create DOM element for the marker
+				    var el = document.createElement('div');
+				    el.id = 'marker';
+
+				    // create the marker
+				    new mapboxgl.Marker(el)
+				      .setLngLat(temp_marker)
+				      .setPopup(popup) // sets a popup on this marker
+				      .addTo(map);
+				}
+			} // success end
+		}); // ajax end
+	}
+
+	window.onload = function() {
+		getAllPoints();
+	};
+
+
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     // toggle sidebar and resize map
@@ -172,8 +200,9 @@
 
 	    
 	  })
-
 	}
+	///////////////////////////////////////////////////////////////////////////////////////////
+
   </script>
 
 </body>
