@@ -18,7 +18,7 @@ body {
 
 #sidebar-wrapper .sidebar-heading {
   padding: 0.875rem 1.25rem;
-  font-size: 1.2rem;
+  font-size: 32px;
 }
 
 #sidebar-wrapper .list-group {
@@ -49,6 +49,18 @@ body {
 }
 
 /**************************************************************************************************/
+
+.sidebar-heading {
+  font-family: 'Creepster', cursive;
+      background-color: black;
+    color: white;
+    font-size: 32px;
+}
+
+.navbar {
+      height: 77px;
+      /*background-color: black!important;*/
+}
 
 #marker {
 background-image: url('../media/marker.png');
@@ -92,4 +104,13 @@ max-width: 200px;
 
 .search_result {
   cursor: pointer;
+}
+
+#result_holder {
+      overflow: scroll;
+    height: 700px;
+}
+
+.comments {
+  font-style: italic;
 }

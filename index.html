@@ -21,6 +21,7 @@
   <link href='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Creepster" rel="stylesheet">
 
 </head>
 
@@ -54,7 +55,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <li class="nav-item active">
               <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
@@ -74,7 +75,7 @@
               </div>
             </li>
           </ul>
-        </div>
+        </div> -->
       </nav>
 
       <div class="container-fluid">
@@ -92,9 +93,6 @@
 
   <!-- Menu Toggle Script -->
   <script>
-
-
-
     ///////////////////////////////////////////////////////////////////////////////////////////
     // SET UP MAP
     mapboxgl.accessToken = 'pk.eyJ1IjoiZGplMjQwMiIsImEiOiJjanNxcHcyaXUwZjBqNDNyemdxYXhrOW9xIn0.R1qo-VYm35TgEjtvZe3Q_Q';
@@ -105,7 +103,6 @@
       center: [-96.82561985119901, 38.190693572931366], // starting position [lng, lat]
       zoom: 3.729604641331270 // starting zoom
     });
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     // DISPLAY MARKER
@@ -135,20 +132,33 @@
 				// for (var i=0; i<6; i++) {
 
 					$record = allLocations[i].record;
-					console.log($record);
+					//console.log($record);
 
 					// get coordinates
 					var lng = allLocations[i].coordinates.coordinates[0];
 					var lat = allLocations[i].coordinates.coordinates[1];
 
+					// get comments
+					var comments_html = "";
+					try {
+						var comments = allLocations[i].comments;
+						for (var k in comments) {
+							comments_html += ("&quot;"+comments[k]+"&quot;<br/>");
+						}
+					}
+					catch(error) {
+					  console.error(error);
+					}
+
+					// show results on html sidebar
 					result_holder_html += '<div id="'+$record+'" onclick="flyToResult('+$record+','+lng+','+lat+');" class="search_result list-group-item list-group-item-action bg-light">'+allLocations[i].location+'</div>'
 
 					// set coords of marker
 				    var temp_marker = [lng, lat];
 				  	// create the popup - use parameters 
 				    var popup = new mapboxgl.Popup({ offset: 25 })
-				    .setHTML("<b>"+allLocations[i].location+"</b><hr/><img src='media/images/"+$record+".jpg' width='180'/><br/>"+allLocations[i].description);
-				     
+				    .setHTML("<b>"+allLocations[i].location+"</b><hr/><img src='media/images/"+$record+".jpg' width='180'/><br/>"+allLocations[i].description+"<hr/><b>Leave a Comment:</b><input type='text' id='comment' name='comment'/><button onclick='postComment("+$record+");'>Submit</button><br/><b>Comments:</b><div class='comments'"+$record+"'>"+comments_html+"</div>");
+
 				    // create DOM element for the marker
 				    var el = document.createElement('div');
 				    el.id = 'marker';
@@ -184,7 +194,7 @@
     });
     
     ///////////////////////////////////////////////////////////////////////////////////////////
-    // This function return a JSON object of a location based on the Zip code in search bar
+    // This function returns a JSON object of a location based on the Zip code in search bar
 	function getObject(){
 	  var zippcode = document.getElementById("search_text").value;
 	  var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+zippcode;
@@ -207,14 +217,14 @@
 
 	    // place name
 	    var place_name = data_obj.features[0].place_name;
-	    console.log("name: "+place_name);
+	    //console.log("name: "+place_name);
 	    document.getElementById("searched_town").innerHTML = place_name;
 
 	    // coords
 	    var lng = data_obj.features[0].geometry.coordinates[0];
 	    var lat = data_obj.features[0].geometry.coordinates[1];
-	    console.log("lng: "+lng);
-	    console.log("lat: "+lat);
+	    //console.log("lng: "+lng);
+	    //console.log("lat: "+lat);
 
 	    // fly to selected position
 		map.flyTo({
@@ -228,21 +238,40 @@
 	  })
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////
+	// this function flys to a selected location result when clicked by user
 	function flyToResult(record, lng, lat) {
-		
+		// clear highligting
 		var results = document.getElementsByClassName("search_result");
 		for (var i = results.length - 1; i >= 0; i--) {
 			results[i].style.fontWeight = "normal";
 		}
 
-
+		// highlight selected location
 	    document.getElementById(""+record).style.fontWeight = "bold";
 
-	    // fly to selected position
+	    // fly to selected location position
 		map.flyTo({
 			center: [lng,lat],
 			zoom: 17
 		});
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////
+	// this function submits the comment left by user
+	function postComment(record) {
+		var comment = document.getElementById("comment").value;
+		console.log("Submitted "+record+" "+comment);
+
+		// post to queries/updateComment.php
+		$.ajax({
+			url:"queries/updateComment.php",
+			method:"POST",
+			data: {'record':record, 'comment':comment},
+			dataType:'json',
+			success:function(data)
+			{
+				console.log("comment success: "+data);
+			} // success end
+		}); // ajax end
 	}
 
   </script>
