@@ -9,5 +9,7 @@ $record = "4501";
 $fileId = new MongoDB\BSON\ObjectId;
 $bucket = (new MongoDB\Client)->haunted->selectGridFSBucket();
 $data = $bucket->openDownloadStream($fileId);
-stream_copy_to_stream($data,'php://output')
+$out = fopen('php://output', 'w');
+stream_copy_to_stream($data, $out);
+
 ?>
