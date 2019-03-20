@@ -34,7 +34,7 @@
       <div class="sidebar-heading">Haunted Places</div>
       <div class="list-group list-group-flush">
         <div class="list-group-item list-group-item-action bg-light" id="s_box">
-        	<input type="text" name="search" id="search_text" placeholder="Location..." />
+        	<input type="text" name="search" id="search_text" placeholder="Location..." onkeypress="keyhandle(event)"/>
         	<button id="search_button" class="fa fa-search" onclick="getObject();"></button>
         </div>
         <div href="#" class="list-group-item list-group-item-action bg-light" id="searched_town"></div>
@@ -273,6 +273,17 @@
 			} // success end
 		}); // ajax end
 	}
+
+  /**
+   * Function to handle keypresses in the `search_text` box.
+   * @param  {KeyboardEvent} ke The KeyboardEvent generated.
+   */
+  function keyhandle(ke) {
+    if (ke.key === 'Enter') {
+      ke.preventDefault();
+      getObject();
+    }
+  }
 
   </script>
 
