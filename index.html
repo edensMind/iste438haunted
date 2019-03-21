@@ -155,9 +155,9 @@
 
 					// set coords of marker
 				    var temp_marker = [lng, lat];
-				  	// create the popup - use parameters 
+				  	// create the popup - use parameters
 				    var popup = new mapboxgl.Popup({ offset: 25 })
-				    .setHTML("<b>"+allLocations[i].location+"</b><hr/><img src='media/images/"+$record+".jpg' width='180'/><br/>"+allLocations[i].description+"<hr/><b>Leave a Comment:</b><input type='text' id='comment' name='comment'/><button onclick='postComment("+$record+");'>Submit</button><br/><b>Comments:</b><div class='comments'"+$record+"'>"+comments_html+"</div>");
+				    .setHTML("<b>"+allLocations[i].location+"</b><hr/><img src='queries/getImage.php?record="+$record+"' width='180'/><br/>"+allLocations[i].description+"<hr/><b>Leave a Comment:</b><input type='text' id='comment' name='comment'/><button onclick='postComment("+$record+");'>Submit</button><br/><b>Comments:</b><div class='comments'"+$record+"'>"+comments_html+"</div>");
 
 				    // create DOM element for the marker
 				    var el = document.createElement('div');
@@ -192,7 +192,7 @@
           map.resize();
       });
     });
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////////
     // This function returns a JSON object of a location based on the Zip code in search bar
 	function getObject(){
@@ -234,7 +234,7 @@
 
 	    getAllPoints(lng,lat);
 
-	    
+
 	  })
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////
