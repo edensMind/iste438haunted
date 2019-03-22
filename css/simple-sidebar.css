@@ -5,6 +5,7 @@
  */
 body {
   overflow-x: hidden;
+  background-image: url('../media/spooky_bg.png');
 }
 
 #sidebar-wrapper {
@@ -48,7 +49,21 @@ body {
   }
 }
 
+
+.border-bottom {
+    border-bottom: none!important;
+}
+
+.bg-light {
+    background-color: transparent!important;
+}
+
+.border-right {
+    border-right: none!important;
+}
 /**************************************************************************************************/
+
+
 
 .sidebar-heading {
   font-family: 'Creepster', cursive;
@@ -60,14 +75,15 @@ body {
 .navbar {
       height: 77px;
       /*background-color: black!important;*/
+      margin-bottom: 20px;
 }
 
 #marker {
-background-image: url('../media/marker.png');
-background-size: cover;
-width: 20px;
-height: 20px;
-cursor: pointer;
+  background-image: url('../media/marker.png');
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }
  
 .mapboxgl-popup {
@@ -100,6 +116,7 @@ max-width: 200px;
 #searched_town {
   background-color: #bbbbbb!important;
   font-weight: bold;
+  height: 74px;
 }
 
 .search_result {
@@ -107,10 +124,30 @@ max-width: 200px;
 }
 
 #result_holder {
-      overflow: scroll;
-    height: 700px;
+      overflow: auto;
+    height: 692px;
+        background-color: #eeeeee;
 }
 
 .comments {
   font-style: italic;
+}
+
+#intro {
+  position: absolute;
+  left: 556px;
+  top: 300px;
+  color: white;
+  font-size: 50px;
+  z-index: 999;
+  font-family: 'Creepster', cursive;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+#map {
+  background-color: transparent!important;
 }

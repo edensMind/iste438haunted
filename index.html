@@ -27,6 +27,8 @@
 
 <body>
 
+	<div id='intro'>Enter a Town or City name to see <br/>what spooky places are nearby!</div>
+
   <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
@@ -37,7 +39,7 @@
         	<input type="text" name="search" id="search_text" placeholder="Location..." onkeypress="keyhandle(event)"/>
         	<button id="search_button" class="fa fa-search" onclick="getObject();"></button>
         </div>
-        <div href="#" class="list-group-item list-group-item-action bg-light" id="searched_town"></div>
+        <div href="#" class="list-group-item list-group-item-action bg-light" id="searched_town">No Town Selected</div>
         <div id="result_holder">
         	<!-- <a href="#" class="list-group-item list-group-item-action bg-light">Result</a> -->
         </div>
@@ -157,7 +159,7 @@
 				    var temp_marker = [lng, lat];
 				  	// create the popup - use parameters
 				    var popup = new mapboxgl.Popup({ offset: 25 })
-				    .setHTML("<b>"+allLocations[i].location+"</b><hr/><img src='queries/getImage.php?record="+$record+"' width='180'/><br/>"+allLocations[i].description+"<hr/><b>Leave a Comment:</b><input type='text' id='comment' name='comment'/><button onclick='postComment("+$record+");'>Submit</button><br/><b>Comments:</b><div class='comments'"+$record+"'>"+comments_html+"</div>");
+				    .setHTML("<b>"+allLocations[i].location+"</b><hr/><img src='queries/getImage.php?record="+$record+"' width='180'/><br/>"+allLocations[i].description+"<hr/><div id='comment_success'></div><b>Leave a Comment:</b><input type='text' id='comment' name='comment' placeholder='Comment...'/><button onclick='postComment("+$record+");'>Submit</button><br/><b>Comments:</b><div class='comments'"+$record+"'>"+comments_html+"</div>");
 
 				    // create DOM element for the marker
 				    var el = document.createElement('div');
@@ -196,6 +198,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////////
     // This function returns a JSON object of a location based on the Zip code in search bar
 	function getObject(){
+		document.getElementById("intro").innerHTML = "";
 	  var zippcode = document.getElementById("search_text").value;
 	  var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+zippcode;
 	  url += '.json?limit=1&country=US&access_token=pk.eyJ1IjoiZGplMjQwMiIsImEiOiJjanNxcHcyaXUwZjBqNDNyemdxYXhrOW9xIn0.R1qo-VYm35TgEjtvZe3Q_Q';
@@ -270,8 +273,16 @@
 			success:function(data)
 			{
 				console.log("comment success: "+data);
+				// clear comment text 
+				document.getElementById("comment").value = "";
+
+				// Print success message:
+				document.getElementById("comment_success").innerHTML = "<p style='color:green'>Comment left, search again to see it!</p>";
 			} // success end
 		}); // ajax end
+
+
+		
 	}
 
   /**
