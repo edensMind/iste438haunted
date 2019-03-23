@@ -1,6 +1,10 @@
 # iste438haunted
 ### iste438 Mongo Project - Haunted Places
 
+This project is built using Mongo PHP Driver and Javascript, employing the Mapbox API.
+
+Displays haunted locations near a City or Town that the user searches for.
+
 * Dataset
   * haunted_places.csv (used this for indexes and image download script)
   * haunted_places.json
